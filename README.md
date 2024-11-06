@@ -77,13 +77,24 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:<tag
 aws eks update-kubeconfig --region <aws-region> --name <cluster-name>
 ```
 
-**4. Pod 배포**
+**4. Deployment 수정**
+* deployment_bae.yaml 내 image의 URL을 ECR의 URL을 업데이트합니다.
+    * Mac
+    ```zsh
+    sed -i '' "s|docker_image_url|<ECR URL>:<Tag>|g" etc/Deployment/deployment_bae.yaml
+    ```
+    * Linux
+    ```bash
+    sed -i "s|docker_image_url|<ECR URL>:<Tag>|g" etc/Deployment/deployment_bae.yaml
+    ```
+
+**5. Pod 배포**
 * etc/Deployment/deployment_bae.yaml 파일을 사용하여 Spring Boot 애플리케이션을 EKS 클러스터에 배포합니다.
 ```bash
 kubectl apply -f etc/Deployment/deployment_bae.yaml
 ```
 
-**5. ALB 정보 확인**
+**6. ALB 정보 확인**
 * deployment_bae.yaml로 생성된 ALB의 정보를 확인하여 웹 페이지에 접속합니다.
 ```bash
 kubectl describe ingress springboot-ingress -n springboot-bae

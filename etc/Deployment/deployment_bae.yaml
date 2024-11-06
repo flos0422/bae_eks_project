@@ -28,7 +28,7 @@ spec:
                     values:
                       - "true"
       containers:
-      - image: <URL of the Docker Image uploaded to ECR>
+      - image: docker_image_url
         imagePullPolicy: Always
         name: springboot
         ports:
