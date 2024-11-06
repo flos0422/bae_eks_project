@@ -13,6 +13,7 @@ VPC, EKS 클러스터, ECR Repository, 그리고 AWS Load Balancer Controller를
 **1. Terraform 설정**
 * main.tf 파일에는 AWS에 EKS Cluster를 위한 기반 인프라를 생성하는 코드가 포함되어 있습니다.
 * lb_controller.tf 파일에는 생성된 EKS Cluster에 AWS Load Balancer Controller를 설치하기 위한 설정이 포함되어 있습니다.
+* deployment.tf 파일에는 템플릿을 참고하여 K8s 배포를 위해 ECR의 URL을 업데이트하여 deployment.yaml 파일을 생성합니다.
 
 **2. VPC 구성**
 * VPC 모듈을 사용하여 CIDR 블록 10.0.0.0/16으로 VPC를 생성합니다.
@@ -64,11 +65,11 @@ aws ecr get-login-password --region <aws-region> | docker login --username AWS -
 ```
 * 이미지에 태그를 지정합니다.
 ```bash
-docker tag <docker_image_id> <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:<tag>
+docker tag <docker_image_id> <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:latest
 ```
 * ECR Repository로 푸시
 ```bash
-docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:<tag>
+docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:latest
 ```
 
 **3. EKS Cluster 연결**
@@ -77,24 +78,13 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<my-repository>:<tag
 aws eks update-kubeconfig --region <aws-region> --name <cluster-name>
 ```
 
-**4. Deployment 수정**
-* deployment_bae.yaml 내 image의 URL을 ECR의 URL을 업데이트합니다.
-    * Mac
-    ```zsh
-    sed -i '' "s|docker_image_url|<ECR URL>:<Tag>|g" etc/Deployment/deployment_bae.yaml
-    ```
-    * Linux
-    ```bash
-    sed -i "s|docker_image_url|<ECR URL>:<Tag>|g" etc/Deployment/deployment_bae.yaml
-    ```
-
-**5. Pod 배포**
+**4. Pod 배포**
 * etc/Deployment/deployment_bae.yaml 파일을 사용하여 Spring Boot 애플리케이션을 EKS 클러스터에 배포합니다.
 ```bash
 kubectl apply -f etc/Deployment/deployment_bae.yaml
 ```
 
-**6. ALB 정보 확인**
+**5. ALB 정보 확인**
 * deployment_bae.yaml로 생성된 ALB의 정보를 확인하여 웹 페이지에 접속합니다.
 ```bash
 kubectl describe ingress springboot-ingress -n springboot-bae
