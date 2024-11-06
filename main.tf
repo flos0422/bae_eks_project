@@ -58,7 +58,6 @@ module "eks" {
         coredns                = {
             resolve_conflicts = "OVERWRITE"
         }
-        # eks-pod-identity-agent = {}
         kube-proxy             = {}
         vpc-cni                = {
             resolve_conflicts = "OVERWRITE"

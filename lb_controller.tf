@@ -43,8 +43,6 @@ provider "helm" {
 }
 
 resource "helm_release" "release" {
-  depends_on = [ module.eks ]
-  
   name = local.lb_service_account_name
   chart = local.lb_service_account_name
   repository = "https://aws.github.io/eks-charts"
@@ -66,4 +64,6 @@ resource "helm_release" "release" {
       value = set.value
     }
   }
+
+  depends_on = [ module.lb_controller_role ]
 }
