@@ -28,7 +28,7 @@ spec:
                     values:
                       - "true"
       containers:
-      - image: 644631683002.dkr.ecr.ap-northeast-2.amazonaws.com/test-bae-ecr:latest
+      - image: <URL of the Docker Image uploaded to ECR>
         imagePullPolicy: Always
         name: springboot
         ports:
