@@ -52,7 +52,7 @@ terraform apply
 **1. Docker 이미지 빌드**
 * etc/images/springboot-bae 디렉토리로 이동하여 Docker 이미지를 빌드합니다.
 ```bash
-tar -xvf springboot-bae.tar
+tar -xvf etc/Docker/springboot-bae.tar
 cd etc/Docker/springboot-bae
 docker buildx build --platform linux/amd64 -t <docker_image_name>:latest .
 ```
