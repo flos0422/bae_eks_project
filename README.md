@@ -6,7 +6,7 @@
 VPC, EKS 클러스터, ECR Repository, 그리고 AWS Load Balancer Controller를 포함하여 Spring Boot 애플리케이션을 배포할 수 있는 환경을 설정합니다.
 
 ### Architecture
-![Architecture](etc/images/EKS_Architecture.png)
+![Architecture](etc/Images/EKS_Architecture.png)
 
 ## 설명
 
@@ -49,11 +49,12 @@ terraform apply
 
 ## Docker 이미지 빌드 및 EKS Pod 배포
 
-**1. Docker 이미지 불러오기**
-* etc/images/springboot-bae 디렉토리로 이동하여 tar로 저장된 Docker 이미지를 불러옵니다.
+**1. Docker 이미지 빌드**
+* etc/images/springboot-bae 디렉토리로 이동하여 Docker 이미지를 빌드합니다.
 ```bash
+tar -xvf springboot-bae.tar
 cd etc/Docker/springboot-bae
-docker load -i springboot-bae.tar
+docker buildx build --platform linux/amd64 -t <docker_image_name>:latest .
 ```
 
 **2. Docker 이미지 푸시**
@@ -80,4 +81,11 @@ aws eks update-kubeconfig --region <aws-region> --name <cluster-name>
 * etc/Deployment/deployment_bae.yaml 파일을 사용하여 Spring Boot 애플리케이션을 EKS 클러스터에 배포합니다.
 ```bash
 kubectl apply -f etc/Deployment/deployment_bae.yaml
+```
+
+**5. ALB 정보 확인**
+* deployment_bae.yaml로 생성된 ALB의 정보를 확인하여 웹 페이지에 접속합니다.
+```bash
+kubectl describe ingress springboot-ingress -n springboot-bae
+kubectl get ingress -n springboot-bae
 ```
