@@ -11,9 +11,9 @@ provider "aws" {
   region = "ap-northeast-2"
   default_tags {
     tags = {
-      # ManagedByTerraform = "true"
+      ManagedByTerraform = "true"
       Creator            = "bae"
-      # Email              = "flos0422@gmail.com"
+      Email              = "flos0422@gmail.com"
     }
   }
 }
